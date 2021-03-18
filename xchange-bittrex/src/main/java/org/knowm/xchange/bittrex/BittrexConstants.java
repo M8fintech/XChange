@@ -35,6 +35,14 @@ public final class BittrexConstants {
   public static final String POST = "Post";
   public static final String DELETE = "Delete";
 
+  // Operands
+  public static final String PRICE_ABOVE = "GTE";
+  public static final String PRICE_BELOW = "LTE";
+
+  // Cancel conditional order types
+  public static final String ORDER = "ORDER";
+  public static final String CONDITIONAL_ORDER = "CONDITIONAL_ORDER";
+
   private BittrexConstants() {
     throw new AssertionError();
   }

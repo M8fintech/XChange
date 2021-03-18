@@ -23,6 +23,7 @@ import org.knowm.xchange.dto.marketdata.Trades;
 import org.knowm.xchange.dto.trade.*;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
+import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.service.trade.TradeService;
 import org.knowm.xchange.service.trade.params.*;
 import org.knowm.xchange.service.trade.params.orders.*;
@@ -107,7 +108,21 @@ public class BinanceTradeService extends BinanceTradeServiceRaw implements Trade
     return placeOrder(orderType, order, order.getLimitPrice(), order.getStopPrice(), tif);
   }
 
-  @Override
+  /**
+   * Place an OCO order
+   *
+   * @param limitOrder
+   * @param stopOrder
+   * @return the list order ID
+   * @throws ExchangeException - Indication that the exchange reported some kind of error with the
+   *     request or response
+   * @throws NotAvailableFromExchangeException - Indication that the exchange does not support the
+   *     requested function or data
+   * @throws NotYetImplementedForExchangeException - Indication that the exchange supports the
+   *     requested function or data, but it has not yet been implemented
+   * @throws IOException - Indication that a networking error occurred while fetching JSON data
+   * @see org.knowm.xchange.utils.OrderValuesHelper
+   */
   public String placeOcoOrder(LimitOrder limitOrder, StopOrder stopOrder) throws IOException {
     // Time-in-force should not be provided for market orders but is required for
     // limit orders, order we only default it for limit orders. If the caller
