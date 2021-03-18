@@ -144,11 +144,11 @@ public interface TradeService extends BaseService {
   }
 
   /**
-   * Place a OCO order
+   * Place an OCO order
    *
    * @param limitOrder
    * @param stopOrder
-   * @return the order ID
+   * @return the list order ID
    * @throws ExchangeException - Indication that the exchange reported some kind of error with the
    *     request or response
    * @throws NotAvailableFromExchangeException - Indication that the exchange does not support the

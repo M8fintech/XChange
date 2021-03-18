@@ -12,13 +12,10 @@ import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.marketdata.Trades;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.OpenOrders;
+import org.knowm.xchange.dto.trade.StopOrder;
 import org.knowm.xchange.dto.trade.UserTrades;
 import org.knowm.xchange.service.trade.TradeService;
-import org.knowm.xchange.service.trade.params.CancelOrderByIdParams;
-import org.knowm.xchange.service.trade.params.CancelOrderParams;
-import org.knowm.xchange.service.trade.params.DefaultTradeHistoryParamCurrencyPair;
-import org.knowm.xchange.service.trade.params.TradeHistoryParamCurrencyPair;
-import org.knowm.xchange.service.trade.params.TradeHistoryParams;
+import org.knowm.xchange.service.trade.params.*;
 import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair;
 import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
 
@@ -40,6 +37,15 @@ public class BittrexTradeService extends BittrexTradeServiceRaw implements Trade
   public String placeLimitOrder(LimitOrder limitOrder) throws IOException {
     try {
       return placeBittrexLimitOrder(limitOrder);
+    } catch (BittrexException e) {
+      throw BittrexErrorAdapter.adapt(e);
+    }
+  }
+
+  @Override
+  public String placeOcoOrder(LimitOrder limitOrder, StopOrder stopOrder) throws IOException {
+    try {
+      return placeBittrexOcoOrder(limitOrder, stopOrder);
     } catch (BittrexException e) {
       throw BittrexErrorAdapter.adapt(e);
     }

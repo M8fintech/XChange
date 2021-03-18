@@ -22,9 +22,7 @@ import org.knowm.xchange.bittrex.dto.account.BittrexNewAddress;
 import org.knowm.xchange.bittrex.dto.account.BittrexWithdrawalHistory;
 import org.knowm.xchange.bittrex.dto.batch.BatchResponse;
 import org.knowm.xchange.bittrex.dto.batch.order.BatchOrder;
-import org.knowm.xchange.bittrex.dto.trade.BittrexNewOrder;
-import org.knowm.xchange.bittrex.dto.trade.BittrexOrder;
-import org.knowm.xchange.bittrex.dto.trade.BittrexOrders;
+import org.knowm.xchange.bittrex.dto.trade.*;
 import si.mazi.rescu.ParamsDigest;
 
 @Path("v3")
@@ -128,6 +126,17 @@ public interface BittrexAuthenticated extends Bittrex {
       @HeaderParam("Api-Content-Hash") ParamsDigest hash,
       @HeaderParam("Api-Signature") ParamsDigest signature,
       BittrexNewOrder newOrderPayload)
+      throws IOException, BittrexException;
+
+  @POST
+  @Path("conditional-orders")
+  @Consumes(MediaType.APPLICATION_JSON)
+  BittrexConditionalOrder placeConditionalOrder(
+      @HeaderParam("Api-Key") String apiKey,
+      @HeaderParam("Api-Timestamp") Long timestamp,
+      @HeaderParam("Api-Content-Hash") ParamsDigest hash,
+      @HeaderParam("Api-Signature") ParamsDigest signature,
+      BittrexNewConditionalOrder newConditionalOrderPayload)
       throws IOException, BittrexException;
 
   @GET
