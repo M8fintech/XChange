@@ -58,14 +58,12 @@ public class BittrexTradeServiceRaw extends BittrexBaseService {
         .getId();
   }
 
-  public String placeBittrexOcoOrder(LimitOrder limitOrder, StopOrder stopOrder)
-      throws IOException {
-    String orderId = placeBittrexLimitOrder(limitOrder);
-    OrderToCancel orderToCancel = new OrderToCancel(BittrexConstants.ORDER, orderId);
-
+  public String placeBittrexOcoOrder(String limitOrderId, StopOrder stopOrder) throws IOException {
+    OrderToCancel orderToCancel = new OrderToCancel(BittrexConstants.ORDER, limitOrderId);
+    String pair = BittrexUtils.toPairString(stopOrder.getCurrencyPair());
     BittrexNewOrder triggeredStopOrder =
         new BittrexNewOrder(
-            BittrexUtils.toPairString(stopOrder.getCurrencyPair()),
+            pair,
             OrderType.BID.equals(stopOrder.getType())
                 ? BittrexConstants.BUY
                 : BittrexConstants.SELL,
@@ -79,7 +77,7 @@ public class BittrexTradeServiceRaw extends BittrexBaseService {
 
     BittrexNewConditionalOrder conditionalOrder =
         new BittrexNewConditionalOrder(
-            BittrexUtils.toPairString(limitOrder.getCurrencyPair()),
+            pair,
             triggeredStopOrder.getDirection().equals(BittrexConstants.SELL)
                 ? BittrexConstants.PRICE_ABOVE
                 : BittrexConstants.PRICE_BELOW,

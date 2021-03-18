@@ -14,6 +14,9 @@ import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.OpenOrders;
 import org.knowm.xchange.dto.trade.StopOrder;
 import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.exceptions.ExchangeException;
+import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
+import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.service.trade.TradeService;
 import org.knowm.xchange.service.trade.params.*;
 import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair;
@@ -37,15 +40,6 @@ public class BittrexTradeService extends BittrexTradeServiceRaw implements Trade
   public String placeLimitOrder(LimitOrder limitOrder) throws IOException {
     try {
       return placeBittrexLimitOrder(limitOrder);
-    } catch (BittrexException e) {
-      throw BittrexErrorAdapter.adapt(e);
-    }
-  }
-
-  @Override
-  public String placeOcoOrder(LimitOrder limitOrder, StopOrder stopOrder) throws IOException {
-    try {
-      return placeBittrexOcoOrder(limitOrder, stopOrder);
     } catch (BittrexException e) {
       throw BittrexErrorAdapter.adapt(e);
     }
@@ -119,6 +113,29 @@ public class BittrexTradeService extends BittrexTradeServiceRaw implements Trade
         }
       }
       return orders;
+    } catch (BittrexException e) {
+      throw BittrexErrorAdapter.adapt(e);
+    }
+  }
+
+  /**
+   * Place an OCO order
+   *
+   * @param limitOrderId id of already sent limit oder
+   * @param stopOrder stop order
+   * @return the list order ID
+   * @throws ExchangeException - Indication that the exchange reported some kind of error with the
+   *     request or response
+   * @throws NotAvailableFromExchangeException - Indication that the exchange does not support the
+   *     requested function or data
+   * @throws NotYetImplementedForExchangeException - Indication that the exchange supports the
+   *     requested function or data, but it has not yet been implemented
+   * @throws IOException - Indication that a networking error occurred while fetching JSON data
+   * @see org.knowm.xchange.utils.OrderValuesHelper
+   */
+  public String placeOcoOrder(String limitOrderId, StopOrder stopOrder) throws IOException {
+    try {
+      return placeBittrexOcoOrder(limitOrderId, stopOrder);
     } catch (BittrexException e) {
       throw BittrexErrorAdapter.adapt(e);
     }
