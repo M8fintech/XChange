@@ -3,7 +3,7 @@ package org.knowm.xchange.binance.dto.trade;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-public class BinanceNewOcoOrder {
+public class BinanceOcoOrder {
   public final Long orderListId;
   public final ContingencyType contingencyType;
   public final OcoStatus listStatusType;
@@ -14,7 +14,7 @@ public class BinanceNewOcoOrder {
   public final List<BinanceOrder> orders;
   public final List<BinanceOrder> orderReports;
 
-  public BinanceNewOcoOrder(
+  public BinanceOcoOrder(
       @JsonProperty("orderListId") Long orderListId,
       @JsonProperty("contingencyType") ContingencyType contingencyType,
       @JsonProperty("listStatusType") OcoStatus listStatusType,

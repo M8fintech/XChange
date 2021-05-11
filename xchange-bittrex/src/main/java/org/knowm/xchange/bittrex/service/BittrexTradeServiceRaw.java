@@ -93,6 +93,11 @@ public class BittrexTradeServiceRaw extends BittrexBaseService {
         .getId();
   }
 
+  public BittrexConditionalOrder cancelBittrexOcoOrder(String ocoOrderId) throws IOException {
+    return bittrexAuthenticated.cancelConditionalOrder(
+        apiKey, System.currentTimeMillis(), contentCreator, signatureCreator, ocoOrderId);
+  }
+
   public BittrexOrder cancelBittrexLimitOrder(String orderId) throws IOException {
     return bittrexAuthenticated.cancelOrder(
         apiKey, System.currentTimeMillis(), contentCreator, signatureCreator, orderId);

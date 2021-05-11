@@ -133,7 +133,7 @@ public class BinanceTradeService extends BinanceTradeServiceRaw implements Trade
             .orElse(stopOrder.getLimitPrice() != null ? TimeInForce.GTC : null);
 
     try {
-      BinanceNewOcoOrder newOcoOrder =
+      BinanceOcoOrder newOcoOrder =
           newOcoOrder(
               limitOrder.getCurrencyPair(),
               BinanceAdapters.convert(limitOrder.getType()),
@@ -149,6 +149,16 @@ public class BinanceTradeService extends BinanceTradeServiceRaw implements Trade
               null,
               null);
       return Long.toString(newOcoOrder.orderListId);
+    } catch (BinanceException e) {
+      throw BinanceErrorAdapter.adapt(e);
+    }
+  }
+
+  public boolean cancelOcoOrder(String listOrderId, CurrencyPair pair) throws IOException {
+    try {
+      BinanceOcoOrder cancelledOcoOrder =
+          cancelOcoOrder(pair, BinanceAdapters.id(listOrderId), null, null);
+      return true;
     } catch (BinanceException e) {
       throw BinanceErrorAdapter.adapt(e);
     }

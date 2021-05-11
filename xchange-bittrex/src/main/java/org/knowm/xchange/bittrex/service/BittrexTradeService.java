@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import org.knowm.xchange.bittrex.*;
 import org.knowm.xchange.bittrex.dto.BittrexException;
+import org.knowm.xchange.bittrex.dto.trade.BittrexConditionalOrder;
 import org.knowm.xchange.bittrex.dto.trade.BittrexOrder;
 import org.knowm.xchange.client.ResilienceRegistries;
 import org.knowm.xchange.dto.Order;
@@ -136,6 +137,15 @@ public class BittrexTradeService extends BittrexTradeServiceRaw implements Trade
   public String placeOcoOrder(String limitOrderId, StopOrder stopOrder) throws IOException {
     try {
       return placeBittrexOcoOrder(limitOrderId, stopOrder);
+    } catch (BittrexException e) {
+      throw BittrexErrorAdapter.adapt(e);
+    }
+  }
+
+  public boolean cancelOcoOrder(String ocoOrderId) throws IOException {
+    try {
+      BittrexConditionalOrder bittrexConditionalOrder = cancelBittrexOcoOrder(ocoOrderId);
+      return true;
     } catch (BittrexException e) {
       throw BittrexErrorAdapter.adapt(e);
     }
