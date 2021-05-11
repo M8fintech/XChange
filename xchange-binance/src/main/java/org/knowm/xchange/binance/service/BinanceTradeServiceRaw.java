@@ -42,7 +42,7 @@ public class BinanceTradeServiceRaw extends BinanceBaseService {
         .call();
   }
 
-  public BinanceNewOcoOrder newOcoOrder(
+  public BinanceOcoOrder newOcoOrder(
       CurrencyPair pair,
       OrderSide side,
       TimeInForce stopLimitTimeInForce,
@@ -80,6 +80,25 @@ public class BinanceTradeServiceRaw extends BinanceBaseService {
         .withRetry(retry("newOcoOrder", NON_IDEMPOTENT_CALLS_RETRY_CONFIG_NAME))
         .withRateLimiter(rateLimiter(ORDERS_PER_SECOND_RATE_LIMITER))
         .withRateLimiter(rateLimiter(ORDERS_PER_DAY_RATE_LIMITER))
+        .withRateLimiter(rateLimiter(REQUEST_WEIGHT_RATE_LIMITER))
+        .call();
+  }
+
+  public BinanceOcoOrder cancelOcoOrder(
+      CurrencyPair pair, long orderListId, String listClientOrderId, String newClientOrderId)
+      throws IOException, BinanceException {
+    return decorateApiCall(
+            () ->
+                binance.cancelOcoOrder(
+                    BinanceAdapters.toSymbol(pair),
+                    orderListId,
+                    listClientOrderId,
+                    newClientOrderId,
+                    getRecvWindow(),
+                    getTimestampFactory(),
+                    super.apiKey,
+                    super.signatureCreator))
+        .withRetry(retry("orderList"))
         .withRateLimiter(rateLimiter(REQUEST_WEIGHT_RATE_LIMITER))
         .call();
   }

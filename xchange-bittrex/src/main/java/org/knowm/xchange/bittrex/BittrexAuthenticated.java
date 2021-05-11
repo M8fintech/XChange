@@ -139,6 +139,17 @@ public interface BittrexAuthenticated extends Bittrex {
       BittrexNewConditionalOrder newConditionalOrderPayload)
       throws IOException, BittrexException;
 
+  @DELETE
+  @Path("conditional-orders/{conditionalOrderId}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  BittrexConditionalOrder cancelConditionalOrder(
+      @HeaderParam("Api-Key") String apiKey,
+      @HeaderParam("Api-Timestamp") Long timestamp,
+      @HeaderParam("Api-Content-Hash") ParamsDigest hash,
+      @HeaderParam("Api-Signature") ParamsDigest signature,
+      @PathParam("conditionalOrderId") String conditionalOrderId)
+      throws IOException, BittrexException;
+
   @GET
   @Path("orders/open")
   BittrexOrders getOpenOrders(
