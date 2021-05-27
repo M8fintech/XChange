@@ -70,7 +70,7 @@ public class BittrexTradeServiceRaw extends BittrexBaseService {
             BittrexConstants.LIMIT,
             stopOrder.getOriginalAmount().toPlainString(),
             null,
-            stopOrder.getLimitPrice().toPlainString(),
+            stopOrder.getStopPrice().toPlainString(),
             TimeInForce.GOOD_TIL_CANCELLED.toString(),
             null,
             null);
