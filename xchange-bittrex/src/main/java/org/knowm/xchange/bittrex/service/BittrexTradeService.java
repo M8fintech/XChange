@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import org.knowm.xchange.bittrex.*;
 import org.knowm.xchange.bittrex.dto.BittrexException;
-import org.knowm.xchange.bittrex.dto.trade.BittrexConditionalOrder;
 import org.knowm.xchange.bittrex.dto.trade.BittrexNewConditionalOrder;
 import org.knowm.xchange.bittrex.dto.trade.BittrexOrder;
 import org.knowm.xchange.client.ResilienceRegistries;
@@ -127,8 +126,7 @@ public class BittrexTradeService extends BittrexTradeServiceRaw implements Trade
 
   public boolean cancelConditionalOrder(String conditionalOrderId) throws IOException {
     try {
-      BittrexConditionalOrder takeProfitxConditionalOrder =
-          cancelBittrexConditionalOrder(conditionalOrderId);
+      cancelBittrexConditionalOrder(conditionalOrderId);
       return true;
     } catch (BittrexException e) {
       throw BittrexErrorAdapter.adapt(e);
