@@ -6,18 +6,14 @@ import java.util.Collection;
 import java.util.List;
 import org.knowm.xchange.bittrex.*;
 import org.knowm.xchange.bittrex.dto.BittrexException;
-import org.knowm.xchange.bittrex.dto.trade.BittrexConditionalOrder;
+import org.knowm.xchange.bittrex.dto.trade.BittrexNewConditionalOrder;
 import org.knowm.xchange.bittrex.dto.trade.BittrexOrder;
 import org.knowm.xchange.client.ResilienceRegistries;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.marketdata.Trades;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.OpenOrders;
-import org.knowm.xchange.dto.trade.StopOrder;
 import org.knowm.xchange.dto.trade.UserTrades;
-import org.knowm.xchange.exceptions.ExchangeException;
-import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
-import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.service.trade.TradeService;
 import org.knowm.xchange.service.trade.params.*;
 import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair;
@@ -119,32 +115,18 @@ public class BittrexTradeService extends BittrexTradeServiceRaw implements Trade
     }
   }
 
-  /**
-   * Place an OCO order
-   *
-   * @param limitOrderId id of already sent limit oder
-   * @param stopOrder stop order
-   * @return the list order ID
-   * @throws ExchangeException - Indication that the exchange reported some kind of error with the
-   *     request or response
-   * @throws NotAvailableFromExchangeException - Indication that the exchange does not support the
-   *     requested function or data
-   * @throws NotYetImplementedForExchangeException - Indication that the exchange supports the
-   *     requested function or data, but it has not yet been implemented
-   * @throws IOException - Indication that a networking error occurred while fetching JSON data
-   * @see org.knowm.xchange.utils.OrderValuesHelper
-   */
-  public String placeOcoOrder(String limitOrderId, StopOrder stopOrder) throws IOException {
+  public String placeConditionalOrder(BittrexNewConditionalOrder conditionalOrder)
+      throws IOException {
     try {
-      return placeBittrexOcoOrder(limitOrderId, stopOrder);
+      return placeBittrexConditionalOrder(conditionalOrder);
     } catch (BittrexException e) {
       throw BittrexErrorAdapter.adapt(e);
     }
   }
 
-  public boolean cancelOcoOrder(String ocoOrderId) throws IOException {
+  public boolean cancelConditionalOrder(String conditionalOrderId) throws IOException {
     try {
-      BittrexConditionalOrder bittrexConditionalOrder = cancelBittrexOcoOrder(ocoOrderId);
+      cancelBittrexConditionalOrder(conditionalOrderId);
       return true;
     } catch (BittrexException e) {
       throw BittrexErrorAdapter.adapt(e);

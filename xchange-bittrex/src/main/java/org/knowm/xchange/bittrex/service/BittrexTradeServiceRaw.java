@@ -16,7 +16,6 @@ import org.knowm.xchange.client.ResilienceRegistries;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order.OrderType;
 import org.knowm.xchange.dto.trade.LimitOrder;
-import org.knowm.xchange.dto.trade.StopOrder;
 import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
 
 @Slf4j
@@ -58,44 +57,18 @@ public class BittrexTradeServiceRaw extends BittrexBaseService {
         .getId();
   }
 
-  public String placeBittrexOcoOrder(String limitOrderId, StopOrder stopOrder) throws IOException {
-    OrderToCancel orderToCancel = new OrderToCancel(BittrexConstants.ORDER, limitOrderId);
-    String pair = BittrexUtils.toPairString(stopOrder.getCurrencyPair());
-    BittrexNewOrder triggeredStopOrder =
-        new BittrexNewOrder(
-            pair,
-            OrderType.BID.equals(stopOrder.getType())
-                ? BittrexConstants.BUY
-                : BittrexConstants.SELL,
-            BittrexConstants.LIMIT,
-            stopOrder.getOriginalAmount().toPlainString(),
-            null,
-            stopOrder.getStopPrice().toPlainString(),
-            TimeInForce.GOOD_TIL_CANCELLED.toString(),
-            null,
-            null);
-
-    BittrexNewConditionalOrder conditionalOrder =
-        new BittrexNewConditionalOrder(
-            pair,
-            triggeredStopOrder.getDirection().equals(BittrexConstants.SELL)
-                ? BittrexConstants.PRICE_ABOVE
-                : BittrexConstants.PRICE_BELOW,
-            stopOrder.getLimitPrice().toPlainString(),
-            null,
-            triggeredStopOrder,
-            orderToCancel,
-            null);
-
+  public String placeBittrexConditionalOrder(BittrexNewConditionalOrder conditionalOrder)
+      throws IOException {
     return bittrexAuthenticated
         .placeConditionalOrder(
             apiKey, System.currentTimeMillis(), contentCreator, signatureCreator, conditionalOrder)
         .getId();
   }
 
-  public BittrexConditionalOrder cancelBittrexOcoOrder(String ocoOrderId) throws IOException {
+  public BittrexConditionalOrder cancelBittrexConditionalOrder(String conditionalOrderId)
+      throws IOException {
     return bittrexAuthenticated.cancelConditionalOrder(
-        apiKey, System.currentTimeMillis(), contentCreator, signatureCreator, ocoOrderId);
+        apiKey, System.currentTimeMillis(), contentCreator, signatureCreator, conditionalOrderId);
   }
 
   public BittrexOrder cancelBittrexLimitOrder(String orderId) throws IOException {
